@@ -1,11 +1,10 @@
-import pytest
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
+from testfrwk.base_class import BaseClass
 
 
-@pytest.mark.usefixtures("setup_driver")
-class TestPhoneShop:
+class TestPhoneShop(BaseClass):
 
     def test_e2e(self):
 
