@@ -1,19 +1,15 @@
-from selenium import webdriver
+import pytest
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
 
+@pytest.mark.usefixtures("setup_driver")
 class TestPhoneShop:
 
     def test_e2e(self):
 
-        base_url = "https://rahulshettyacademy.com/angularpractice/"
-
-        driver = webdriver.Chrome(executable_path="C:\\Users\\candk\\Envs\\amazon\\Scripts\\chromedriver.exe")
-        driver.get(base_url)
-        driver.implicitly_wait(1)
-        driver.maximize_window()
+        driver = self.driver
         driver.find_element_by_css_selector("a[href*='shop']").click()
         products_to_buy = ["Samsung Note 8"]
         currency = "₹. "
