@@ -1,6 +1,8 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
+
+from pages.homepage import Homepage
 from testfrwk.base_class import BaseClass
 
 
@@ -9,7 +11,8 @@ class TestPhoneShop(BaseClass):
     def test_e2e(self):
 
         driver = self.driver
-        driver.find_element_by_css_selector("a[href*='shop']").click()
+        homepage = Homepage(driver)
+        homepage.click_shop_button()
         products_to_buy = ["Samsung Note 8"]
         currency = "₹. "
         ship_to_destination = "United States of America"
