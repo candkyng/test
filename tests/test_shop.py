@@ -3,6 +3,7 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
 from pages.homepage import Homepage
+from pages.productpage import ProductPage
 from testfrwk.base_class import BaseClass
 
 
@@ -13,18 +14,13 @@ class TestPhoneShop(BaseClass):
         driver = self.driver
         homepage = Homepage(driver)
         homepage.click_shop_button()
-        products_to_buy = ["Samsung Note 8"]
+        products_to_buy = ["Samsung Note 8", "Blackberry"]
         currency = "₹. "
         ship_to_destination = "United States of America"
         success_message_expected = "Success! Thank you! Your order will be delivered in next few weeks :-)."
 
-        e_products = driver.find_elements_by_css_selector("div[class='card h-100']")
-        print(len(e_products))
-        for eProduct in e_products:
-            product_name = eProduct.find_element_by_css_selector("div h4 a").text
-            print(product_name)
-            if product_name in products_to_buy:
-                eProduct.find_element_by_css_selector("div button").click()
+        product_page = ProductPage(driver)
+        product_page.add_products_to_cart(products_to_buy)
 
         driver.find_element_by_css_selector("a[class*='btn-primary']").click()
         e_products_in_cart = driver.find_elements_by_xpath("//td[contains(@class,'col-sm-8')]/parent::tr")
