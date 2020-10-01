@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
+from pages.cartpage import CartPage
 from pages.homepage import Homepage
 from pages.productpage import ProductPage
 from testfrwk.base_class import BaseClass
@@ -21,26 +22,18 @@ class TestPhoneShop(BaseClass):
 
         product_page = ProductPage(driver)
         product_page.add_products_to_cart(products_to_buy)
+        product_page.click_checkout_button()
 
-        driver.find_element_by_css_selector("a[class*='btn-primary']").click()
-        e_products_in_cart = driver.find_elements_by_xpath("//td[contains(@class,'col-sm-8')]/parent::tr")
-        total = 0
-        for eProduct in e_products_in_cart:
-            product_name_in_cart = eProduct.find_element_by_css_selector("h4 a").text
-            print(product_name_in_cart)
-            assert product_name_in_cart in products_to_buy
-            product_total_text = str(eProduct.find_element_by_xpath("td[4]/strong").text)
-            product_total_text = product_total_text.replace(currency, "")
-            total += float(product_total_text)
+        cart_page = CartPage(driver)
+        products_in_cart = cart_page.get_products()
+        product_names_in_cart = [p.name for p in products_in_cart]
+        assert product_names_in_cart == products_to_buy
 
-        total_expected_text = driver.find_element_by_xpath("//td[@class='text-right']/h3/strong").text
-        print(total_expected_text)
-        total_expected_text = total_expected_text.replace(currency, "")
-        print(total_expected_text)
-        total_expected = float(total_expected_text)
-        assert total == total_expected
+        product_totals_in_cart = [p.total for p in products_in_cart]
+        assert sum(product_totals_in_cart) == cart_page.get_total()
 
-        driver.find_element_by_css_selector("button[class*='btn-success']").click()
+        cart_page.click_checkout_button()
+
         driver.find_element_by_id("country").send_keys("United")
         WebDriverWait(driver, 10).until(ec.presence_of_element_located((By.CSS_SELECTOR, "div[class='suggestions']")))
 

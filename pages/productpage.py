@@ -10,6 +10,7 @@ class ProductPage:
     product_cards = (By.CSS_SELECTOR, "div[class='card h-100']")
     product_name_in_card = (By.CSS_SELECTOR, "div h4 a")
     product_add_button_in_card = (By.CSS_SELECTOR, "div button")
+    checkout_button = (By.CSS_SELECTOR, "a[class*='btn-primary']")
 
     def add_products_to_cart(self, products_to_buy):
 
@@ -18,3 +19,7 @@ class ProductPage:
             product_name_in_card = card.find_element(*self.product_name_in_card).text
             if product_name_in_card in products_to_buy:
                 card.find_element(*self.product_add_button_in_card).click()
+
+    def click_checkout_button(self):
+
+        self.driver.find_element(*self.checkout_button).click()
