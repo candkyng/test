@@ -2,6 +2,8 @@ from collections import namedtuple
 
 from selenium.webdriver.common.by import By
 
+from pages.checkoutpage import CheckoutPage
+
 
 class CartPage:
 
@@ -44,3 +46,4 @@ class CartPage:
     def click_checkout_button(self):
 
         self.driver.find_element(*self.checkout_button).click()
+        return CheckoutPage(self.driver)

@@ -1,5 +1,7 @@
 from selenium.webdriver.common.by import By
 
+from pages.productpage import ProductPage
+
 
 class Homepage:
 
@@ -12,3 +14,4 @@ class Homepage:
     # Objects
     def click_shop_button(self):
         self.driver.find_element(*self.loc_shop_button).click()
+        return ProductPage(self.driver)

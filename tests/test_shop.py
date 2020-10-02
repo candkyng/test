@@ -15,15 +15,9 @@ class TestPhoneShop(BaseClass):
         success_message_expected = "Success! Thank you! Your order will be delivered in next few weeks :-)."
 
         # Steps and Assertions
-        driver = self.driver
-        homepage = Homepage(driver)
-        homepage.click_shop_button()
-
-        product_page = ProductPage(driver)
+        product_page = Homepage(self.driver).click_shop_button()
         product_page.add_products_to_cart(products_to_buy)
-        product_page.click_checkout_button()
-
-        cart_page = CartPage(driver)
+        cart_page = product_page.click_checkout_button()
         products_in_cart = cart_page.get_products()
         product_names_in_cart = [p.name for p in products_in_cart]
         assert product_names_in_cart == products_to_buy
@@ -31,9 +25,7 @@ class TestPhoneShop(BaseClass):
         product_totals_in_cart = [p.total for p in products_in_cart]
         assert sum(product_totals_in_cart) == cart_page.get_total()
 
-        cart_page.click_checkout_button()
-
-        checkout_page = CheckoutPage(driver)
+        checkout_page = cart_page.click_checkout_button()
         checkout_page.enter_destination(search_destination)
         checkout_page.select_destination_from_dropdown(ship_to_destination)
         assert ship_to_destination == checkout_page.get_destination()
