@@ -9,19 +9,19 @@ class ProductPage:
         self.driver = driver
 
     # Locators
-    product_cards = (By.CSS_SELECTOR, "div[class='card h-100']")
-    product_name_in_card = (By.CSS_SELECTOR, "div h4 a")
-    product_add_button_in_card = (By.CSS_SELECTOR, "div button")
-    checkout_button = (By.CSS_SELECTOR, "a[class*='btn-primary']")
+    PRODUCT_CARDS = (By.CSS_SELECTOR, "div[class='card h-100']")
+    PRODUCT_NAME_IN_CARD = (By.CSS_SELECTOR, "div h4 a")
+    PRODUCT_ADD_BUTTON_IN_CARD = (By.CSS_SELECTOR, "div button")
+    CHECKOUT_BUTTON = (By.CSS_SELECTOR, "a[class*='btn-primary']")
 
     def add_products_to_cart(self, products_to_buy):
 
-        product_cards = self.driver.find_elements(*self.product_cards)
+        product_cards = self.driver.find_elements(*self.PRODUCT_CARDS)
         for card in product_cards:
-            product_name_in_card = card.find_element(*self.product_name_in_card).text
+            product_name_in_card = card.find_element(*self.PRODUCT_NAME_IN_CARD).text
             if product_name_in_card in products_to_buy:
-                card.find_element(*self.product_add_button_in_card).click()
+                card.find_element(*self.PRODUCT_ADD_BUTTON_IN_CARD).click()
 
     def click_checkout_button(self):
-        self.driver.find_element(*self.checkout_button).click()
+        self.driver.find_element(*self.CHECKOUT_BUTTON).click()
         return CartPage(self.driver)

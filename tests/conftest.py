@@ -7,9 +7,8 @@ def pytest_addoption(parser):
 
 
 @pytest.fixture(scope="class")
-def setup_driver(request):
+def get_driver(request):
     browser = request.config.getoption("--browser")
-    base_url = "https://rahulshettyacademy.com/angularpractice/"
 
     if browser == "chrome":
         driver = webdriver.Chrome()
@@ -20,7 +19,6 @@ def setup_driver(request):
     else:
         assert False, f"Unsupported browser {browser}"
 
-    driver.get(base_url)
     driver.implicitly_wait(1)
     driver.maximize_window()
     request.cls.driver = driver
