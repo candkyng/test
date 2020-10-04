@@ -2,14 +2,15 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
+from pages.basepage import BasePage
 
-class CheckoutPage:
+
+class CheckoutPage(BasePage):
 
     def __init__(self, driver):
         self.driver = driver
 
     COUNTRY_INPUT = (By.ID, "country")
-    COUNTRY_SUGGESTION = (By.CSS_SELECTOR, "div[class='suggestions']")
     AGREE_CONDITION = (By.CSS_SELECTOR, "div[class='checkbox checkbox-primary'")
     PURCHASE_BUTTON = (By.CSS_SELECTOR, "input[value='Purchase']")
     SUCCESS_ALERT = (By.CSS_SELECTOR, "div[class*='alert-success']")
@@ -18,10 +19,8 @@ class CheckoutPage:
         self.driver.find_element(*self.COUNTRY_INPUT).send_keys(search_text)
 
     def select_destination_from_dropdown(self, destination):
-        WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located(self.COUNTRY_SUGGESTION))
-        xpath = f"//a[text()='{destination}']"
-        self.driver.find_element_by_xpath(xpath).click()
+        locator = (By.XPATH, f"//a[text()='{destination}']")
+        self.click(locator)
 
     def get_destination(self):
         return self.driver.execute_script('return document.getElementById("country").value')

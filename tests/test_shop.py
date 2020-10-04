@@ -1,7 +1,4 @@
-from pages.cartpage import CartPage
-from pages.checkoutpage import CheckoutPage
 from pages.homepage import Homepage
-from pages.productpage import ProductPage
 from testfrwk.base_class import BaseClass
 
 
