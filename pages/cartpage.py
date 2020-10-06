@@ -2,10 +2,12 @@ from collections import namedtuple
 
 from selenium.webdriver.common.by import By
 
+from data.shop_data import ShopData
+from pages.basepage import BasePage
 from pages.checkoutpage import CheckoutPage
 
 
-class CartPage:
+class CartPage(BasePage):
 
     # Locators
     PRODUCT_ROWS = (By.XPATH, "//td[contains(@class,'col-sm-8')]/parent::tr")
@@ -15,7 +17,6 @@ class CartPage:
     CHECKOUT_BUTTON = (By.CSS_SELECTOR, "button[class*='btn-success']")
 
     product = namedtuple('Product', ['name', 'total'])
-    CURRENCY = "₹. "
 
     def __init__(self, driver):
 
@@ -29,7 +30,7 @@ class CartPage:
         for row in rows:
             name = row.find_element(*CartPage.PRODUCT_NAME_IN_ROW).text
             product_total_text = str(row.find_element(*CartPage.PRODUCT_TOTAL_IN_ROW).text)
-            product_total_text = product_total_text.replace(CartPage.CURRENCY, "")
+            product_total_text = product_total_text.replace(ShopData.CURRENCY, "")
             total = float(product_total_text)
             products.append(self.product(name, total))
         return products
@@ -40,10 +41,10 @@ class CartPage:
 
     def get_total(self):
         total_text = self.driver.find_element(*CartPage.SUM_OF_TOTAL).text
-        total_text = total_text.replace(CartPage.CURRENCY, "")
+        total_text = total_text.replace(ShopData.CURRENCY, "")
         return float(total_text)
 
     def click_checkout_button(self):
 
-        self.driver.find_element(*self.CHECKOUT_BUTTON).click()
+        self.click(self.CHECKOUT_BUTTON)
         return CheckoutPage(self.driver)

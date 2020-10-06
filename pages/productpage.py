@@ -1,9 +1,9 @@
 from selenium.webdriver.common.by import By
-
+from pages.basepage import BasePage
 from pages.cartpage import CartPage
 
 
-class ProductPage:
+class ProductPage(BasePage):
 
     def __init__(self, driver):
         self.driver = driver
@@ -20,8 +20,8 @@ class ProductPage:
         for card in product_cards:
             product_name_in_card = card.find_element(*self.PRODUCT_NAME_IN_CARD).text
             if product_name_in_card in products_to_buy:
-                card.find_element(*self.PRODUCT_ADD_BUTTON_IN_CARD).click()
+                self.click(self.PRODUCT_ADD_BUTTON_IN_CARD, card)
 
     def click_checkout_button(self):
-        self.driver.find_element(*self.CHECKOUT_BUTTON).click()
+        self.click(self.CHECKOUT_BUTTON)
         return CartPage(self.driver)

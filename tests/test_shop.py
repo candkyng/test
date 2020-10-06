@@ -1,18 +1,28 @@
+import pytest
+
+from data.shop_data import ShopData
 from pages.homepage import Homepage
-from testfrwk.base_class import BaseClass
+from testutil.base_class import BaseClass
 
 
 class TestPhoneShop(BaseClass):
 
-    def test_e2e(self):
+    @pytest.fixture(params=ShopData.E2ETEST)
+    def data_e2e(self, request):
+        return request.param
+
+    def test_e2e(self, data_e2e):
+
         # Test Data
-        products_to_buy = ["Samsung Note 8", "Blackberry"]
-        search_destination = "State"
-        ship_to_destination = "United States of America"
-        success_message_expected = "Success! Thank you! Your order will be delivered in next few weeks :-)."
+        products_to_buy = data_e2e['products']
+        search_destination = data_e2e['search_country']
+        ship_to_destination = data_e2e['country']
+        success_message_expected = ShopData.SUCCESS_MSG_EXPECTED
 
         # Steps and Assertions
-        product_page = Homepage(self.driver).click_shop_button()
+        homepage = Homepage(self.driver)
+        homepage.goto()
+        product_page = homepage.click_shop_button()
         product_page.add_products_to_cart(products_to_buy)
         cart_page = product_page.click_checkout_button()
         products_in_cart = cart_page.get_products()
@@ -30,3 +40,4 @@ class TestPhoneShop(BaseClass):
         checkout_page.click_agree_condition()
         checkout_page.click_purchase_button()
         assert success_message_expected in checkout_page.get_success_text()
+
