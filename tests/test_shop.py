@@ -24,6 +24,8 @@ class TestPhoneShop(BaseClass):
         homepage.goto()
         product_page = homepage.click_shop_button()
         product_page.add_products_to_cart(products_to_buy)
+        assert product_page.get_checkout_number() == len(products_to_buy)
+
         cart_page = product_page.click_checkout_button()
         products_in_cart = cart_page.get_products()
         product_names_in_cart = [p.name for p in products_in_cart]
