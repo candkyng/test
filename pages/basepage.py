@@ -12,6 +12,8 @@ class BasePage:
             element = self.driver
         WebDriverWait(element, 10).until(EC.presence_of_element_located(loc)).click()
 
+    def enter_text(self, loc, text):
+        WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(loc)).send_keys(text)
 
 
 

@@ -5,6 +5,17 @@ class HomepageLocators:
 
     SHOP_BUTTON = (By.CSS_SELECTOR, "a[href*='shop']")
     HOME_BUTTON = (By.LINK_TEXT, "Home")
+    NAME_FIELD = (By.NAME, "name")
+    EMAIL_FIELD = (By.NAME, "email")
+    PASSWORD_FIELD = (By.CSS_SELECTOR, "input[type='password']")
+    CHECKBOX_LOVE_ICE_CREAM = (By.ID, "exampleCheck1")
+    GENDER_SELECT = (By.ID, "exampleFormControlSelect1")
+    EMP_STATUS_STUDENT = (By.CSS_SELECTOR, "input[value='option1']")
+    EMP_STATUS_EMPLOYED = (By.CSS_SELECTOR, "input[value='option2']")
+    EMP_STATUS_ENTREPRENEUR = (By.CSS_SELECTOR, "input[value='option3']")
+    DOB_FIELD = (By.NAME, "bday")
+    SUBMIT_BUTTON = (By.CSS_SELECTOR, "input[value='Submit']")
+    SUCCESS_TEXT = (By.XPATH, "//div[contains(@class,'alert-success')]")
 
 
 class CartPageLocators:
