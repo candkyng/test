@@ -8,6 +8,8 @@ from testutil.base_class import BaseClass
 class TestHomepage(BaseClass):
 
     def test_home(self, home_data):
+        log = self.get_logger()
+        self.log_testdata_info(log, home_data)
         homepage = Homepage(self.driver)
         homepage.goto()
         homepage.enter_name(home_data['name'])

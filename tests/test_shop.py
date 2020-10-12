@@ -12,6 +12,8 @@ class TestPhoneShop(BaseClass):
         return request.param
 
     def test_e2e(self, data_e2e):
+        log = self.get_logger()
+        self.log_testdata_info(log, data_e2e)
 
         # Test Data
         products_to_buy = data_e2e['products']
