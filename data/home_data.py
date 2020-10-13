@@ -1,4 +1,5 @@
 class HomeData:
+    PAGE_URL = "https://rahulshettyacademy.com/angularpractice/"
     HOMETEST0 = {'name': 'Mary Watson', 'email': 'mw@demo.com', 'password': 'mypass', 'love_ice_cream': True,
                  'gender': 'Female', 'status': 'employed', 'birthdate': '10201980'}
     HOMETEST1 = {'name': 'John Newman', 'email': 'johnn@demo.com', 'password': 'mypass1', 'love_ice_cream': False,

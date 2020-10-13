@@ -1,10 +1,14 @@
 import pytest
 from selenium import webdriver
 
+from data.home_data import HomeData
+
 driver = None
 
+
 def pytest_addoption(parser):
-    parser.addoption("--browser", action="store", default="chrome", help="browser name (chrome, firefox or edge")
+    parser.addoption("--browser", action="store", default="chrome", help="browser name (chrome, firefox or edge)")
+    parser.addoption("--url", action="store", default=HomeData.PAGE_URL, help="provide test URL")
 
 
 @pytest.fixture(scope="class")
@@ -27,6 +31,11 @@ def get_driver(request):
     yield
     driver.close()
     driver.quit()
+
+
+@pytest.fixture(scope="class")
+def get_url(request):
+    request.cls.test_url = request.config.getoption("--url")
 
 
 @pytest.mark.hookwrapper

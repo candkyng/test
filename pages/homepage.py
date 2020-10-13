@@ -7,13 +7,12 @@ from pages.productpage import ProductPage
 
 class Homepage(BasePage):
 
-    def __init__(self, driver):
+    def __init__(self, driver, url):
         self.driver = driver
-
-    PAGE_URL = "https://rahulshettyacademy.com/angularpractice/"
+        self.url = url
 
     def goto(self):
-        self.driver.get(self.PAGE_URL)
+        self.driver.get(self.url)
         return self
 
     def click_home_button(self):

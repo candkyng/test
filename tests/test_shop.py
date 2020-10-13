@@ -22,7 +22,7 @@ class TestPhoneShop(BaseClass):
         success_message_expected = ShopData.SUCCESS_MSG_EXPECTED
 
         # Steps and Assertions
-        homepage = Homepage(self.driver)
+        homepage = Homepage(self.driver, self.test_url)
         homepage.goto()
         product_page = homepage.click_shop_button()
         product_page.add_products_to_cart(products_to_buy)

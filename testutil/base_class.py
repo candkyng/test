@@ -4,7 +4,7 @@ import logging
 import pytest
 
 
-@pytest.mark.usefixtures("get_driver")
+@pytest.mark.usefixtures("get_driver","get_url")
 class BaseClass:
 
     def get_logger(self):
