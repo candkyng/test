@@ -20,10 +20,10 @@ class CheckoutPage(BasePage):
         return self.driver.execute_script('return document.getElementById("country").value')
 
     def click_agree_condition(self):
-        self.driver.find_element(*CheckoutPageLocators.AGREE_CONDITION).click()
+        self.click(CheckoutPageLocators.AGREE_CONDITION)
 
     def click_purchase_button(self):
-        self.driver.find_element(*CheckoutPageLocators.PURCHASE_BUTTON).click()
+        self.click(CheckoutPageLocators.PURCHASE_BUTTON)
 
     def get_success_text(self):
         return self.driver.find_element(*CheckoutPageLocators.SUCCESS_ALERT).text
