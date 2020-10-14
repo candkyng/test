@@ -42,6 +42,7 @@ def get_url(request):
 def pytest_runtest_makereport(item):
     """
     Extends the PyTest Plugin to take and embed screenshot in html report, whenever test fails.
+    This method is copied from the course https://www.udemy.com/course/learn-selenium-automation-in-easy-python-language/
     """
     pytest_html = item.config.pluginmanager.getplugin('html')
     outcome = yield
