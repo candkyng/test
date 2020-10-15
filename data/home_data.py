@@ -1,4 +1,5 @@
 import openpyxl
+import os
 
 
 class HomeData:
@@ -6,8 +7,9 @@ class HomeData:
     SUCCESS_TEXT_EXPECTED = "Success!"
 
     @staticmethod
-    def get_excel_sheet(filename="home_data.xlsx", sheetname="Sheet1"):
-        workbook = openpyxl.load_workbook(filename)
+    def get_excel_sheet(filename, sheetname):
+        current_dir = os.path.dirname(__file__)
+        workbook = openpyxl.load_workbook(current_dir + '\\' + filename)
         return workbook[sheetname]
 
     @staticmethod
@@ -22,7 +24,7 @@ class HomeData:
         return data
 
     @staticmethod
-    def get_list_all_data(filename="..\\data\\home_data.xlsx", sheetname="Sheet1"):
+    def get_list_all_data(filename="home_data.xlsx", sheetname="Sheet1"):
         sheet = HomeData.get_excel_sheet(filename, sheetname)
         data_list = []
 

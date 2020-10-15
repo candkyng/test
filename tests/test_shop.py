@@ -7,7 +7,7 @@ from testutil.base_class import BaseClass
 
 class TestPhoneShop(BaseClass):
 
-    @pytest.fixture(params=ShopData.E2ETEST)
+    @pytest.fixture(params=ShopData.get_data_all())
     def data_e2e(self, request):
         return request.param
 
@@ -44,4 +44,3 @@ class TestPhoneShop(BaseClass):
         checkout_page.click_agree_condition()
         checkout_page.click_purchase_button()
         assert success_message_expected in checkout_page.get_success_text()
-
