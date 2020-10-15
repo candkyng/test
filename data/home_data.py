@@ -1,8 +1,37 @@
+import openpyxl
+
+
 class HomeData:
     PAGE_URL = "https://rahulshettyacademy.com/angularpractice/"
-    HOMETEST0 = {'name': 'Mary Watson', 'email': 'mw@demo.com', 'password': 'mypass', 'love_ice_cream': True,
-                 'gender': 'Female', 'status': 'employed', 'birthdate': '10201980'}
-    HOMETEST1 = {'name': 'John Newman', 'email': 'johnn@demo.com', 'password': 'mypass1', 'love_ice_cream': False,
-                 'gender': 'Male', 'status': 'student', 'birthdate': '10201992'}
-    HOMETEST = [HOMETEST0, HOMETEST1]
     SUCCESS_TEXT_EXPECTED = "Success!"
+
+    @staticmethod
+    def get_excel_sheet(filename="home_data.xlsx", sheetname="Sheet1"):
+        workbook = openpyxl.load_workbook(filename)
+        return workbook[sheetname]
+
+    @staticmethod
+    def get_data(sheet, data_row):
+        ''' print(f"\nRetrieving data from row {data_row} ")'''
+        if sheet is None:
+            sheet = HomeData.get_excel_sheet()
+
+        data = {}
+        for col in range(1, sheet.max_column+1):
+            data[sheet.cell(1, col).value] = sheet.cell(data_row, col).value
+        return data
+
+    @staticmethod
+    def get_list_all_data(filename="..\\data\\home_data.xlsx", sheetname="Sheet1"):
+        sheet = HomeData.get_excel_sheet(filename, sheetname)
+        data_list = []
+
+        for row in range(2, sheet.max_row+1):
+            data_list.append(HomeData.get_data(sheet, row))
+        return data_list
+
+
+''' This is for testing the static methods '''
+if __name__ == "__main__":
+    test = HomeData.get_list_all_data()
+

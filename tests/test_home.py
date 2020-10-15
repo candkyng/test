@@ -22,6 +22,6 @@ class TestHomepage(BaseClass):
         homepage.click_submit_button()
         assert HomeData.SUCCESS_TEXT_EXPECTED in homepage.get_success_text()
 
-    @pytest.fixture(params=HomeData.HOMETEST)
+    @pytest.fixture(params=HomeData.get_list_all_data())
     def home_data(self, request):
         return request.param
