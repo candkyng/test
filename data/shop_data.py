@@ -31,10 +31,7 @@ class ShopData:
         row = csv_lines[data_row]
         data = {}
         for col in range(len(header)):
-            if str(header[col]).lower() == "products":
-                data[header[col]] = [x.strip() for x in str(row[col]).split(',')]
-            else:
-                data[header[col]] = row[col]
+            data[header[col]] = row[col]
         return data
 
     @staticmethod

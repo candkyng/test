@@ -16,7 +16,7 @@ class TestPhoneShop(BaseClass):
         self.log_testdata_info(log, data_e2e)
 
         # Test Data
-        products_to_buy = data_e2e['products']
+        products_to_buy = [x.strip() for x in str(data_e2e['products']).split(',')]
         search_destination = data_e2e['search_country']
         ship_to_destination = data_e2e['country']
         success_message_expected = ShopData.SUCCESS_MSG_EXPECTED
