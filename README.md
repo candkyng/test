@@ -1,10 +1,15 @@
 <h1>test-web-demo</h1>
 <p>Create pytest framework with page object design pattern from scratch.</p>
 <p>Invoke selenium automated test scenarios by Jenkins</p>
- 
- <h2>Run test</h2>
- <p> </p>
- <p>By default, chrome browser will be used. To run in Firefox or Edge, use  
+
+<h2>Run test</h2>
+ <p>Ensure the following python packages are installed:</p>
+ <ul>
+ <li>selenium</li>
+ <li>openpyxl</li>
+ <li>pytest</li>
+ </ul>
+ <p>By default, chrome browser will be used. To run the test in Firefox or Edge, use  
  <code>--browser</code> option:  
  
  <code>py.test --browser edge</code><br><br>
