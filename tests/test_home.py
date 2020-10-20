@@ -20,10 +20,7 @@ class TestHomepage(BaseClass):
         homepage.select_love_ice_cream(home_data['love_ice_cream'])
         homepage.select_gender(home_data['gender'])
         homepage.select_employment_status(home_data['status'])
-
-        dob = home_data['birthdate']
-        dob_input = str(dob.month) + str(dob.day) + str(dob.year)
-        homepage.enter_date_of_birth(dob_input)
+        homepage.enter_date_of_birth(home_data['birthdate'])
         homepage.click_submit_button()
         # Verify data is shown on the UI
         assert homepage.get_text_from_input(HomepageLocators.NAME_FIELD) == home_data['name']
@@ -31,7 +28,7 @@ class TestHomepage(BaseClass):
         assert homepage.get_love_ice_cream() == home_data['love_ice_cream']
         assert homepage.get_text_from_input(HomepageLocators.GENDER_SELECT) == home_data['gender']
         assert homepage.get_employment_status() == home_data['status']
-        assert datetime.fromisoformat(homepage.get_text_from_input(HomepageLocators.DOB_FIELD)) == home_data['birthdate']
+        assert homepage.get_text_from_input(HomepageLocators.DOB_FIELD) == home_data['birthdate'].strftime('%Y-%m-%d')
         assert HomeData.SUCCESS_TEXT_EXPECTED in homepage.get_success_text()
 
     @pytest.fixture(params=HomeData.get_list_all_data())

@@ -48,7 +48,13 @@ class Homepage(BasePage):
             self.click(HomepageLocators.EMP_STATUS_EMPLOYED)
 
     def enter_date_of_birth(self, date):
-        self.enter_text(HomepageLocators.DOB_FIELD, date)
+        '''
+        Enter date of birth
+        :param date: datetime object
+        :return:
+        '''
+        dob_input = date.strftime('%m%d%Y')  # convert to string format
+        self.enter_text(HomepageLocators.DOB_FIELD, dob_input)
 
     def click_submit_button(self):
         self.click(HomepageLocators.SUBMIT_BUTTON)
