@@ -33,7 +33,7 @@ class Homepage(BasePage):
         self.enter_text(HomepageLocators.PASSWORD_FIELD, password)
 
     def select_love_ice_cream(self, selection):
-        check_status = self.driver.find_element(*HomepageLocators.CHECKBOX_LOVE_ICE_CREAM).is_selected()
+        check_status = self.get_love_ice_cream()
         if selection is not check_status:
             self.click(HomepageLocators.CHECKBOX_LOVE_ICE_CREAM)
 
@@ -55,3 +55,13 @@ class Homepage(BasePage):
 
     def get_success_text(self):
         return self.driver.find_element(*HomepageLocators.SUCCESS_TEXT).text
+
+    def get_employment_status(self):
+        if self.driver.find_element(*HomepageLocators.EMP_STATUS_STUDENT).is_selected() is True:
+            return 'student'
+        elif self.driver.find_element(*HomepageLocators.EMP_STATUS_EMPLOYED).is_selected() is True:
+            return 'employed'
+        return None
+
+    def get_love_ice_cream(self):
+        return self.driver.find_element(*HomepageLocators.CHECKBOX_LOVE_ICE_CREAM).is_selected()
