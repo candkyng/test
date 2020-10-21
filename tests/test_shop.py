@@ -1,58 +1,46 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as ec
-from selenium.webdriver.support.wait import WebDriverWait
+import pytest
+
+from data.shop_data import ShopData
+from pages.homepage import Homepage
+from testutil.base_class import BaseClass
 
 
-class TestPhoneShop:
+class TestPhoneShop(BaseClass):
 
-    def test_e2e(self):
+    @pytest.fixture(params=ShopData.get_data_all())
+    def data_e2e(self, request):
+        return request.param
 
-        base_url = "https://rahulshettyacademy.com/angularpractice/"
+    def test_e2e(self, data_e2e):
+        log = self.get_logger()
+        self.log_testdata_info(log, data_e2e)
 
-        driver = webdriver.Chrome(executable_path="C:\\Users\\candk\\Envs\\amazon\\Scripts\\chromedriver.exe")
-        driver.get(base_url)
-        driver.implicitly_wait(1)
-        driver.maximize_window()
-        driver.find_element_by_css_selector("a[href*='shop']").click()
-        products_to_buy = ["Samsung Note 8"]
-        currency = "₹. "
-        ship_to_destination = "United States of America"
-        success_message_expected = "Success! Thank you! Your order will be delivered in next few weeks :-)."
+        # Test Data
+        products_to_buy = [x.strip() for x in str(data_e2e['products']).split(',')]
+        search_destination = data_e2e['search_country']
+        ship_to_destination = data_e2e['country']
+        success_message_expected = ShopData.SUCCESS_MSG_EXPECTED
 
-        e_products = driver.find_elements_by_css_selector("div[class='card h-100']")
-        print(len(e_products))
-        for eProduct in e_products:
-            product_name = eProduct.find_element_by_css_selector("div h4 a").text
-            print(product_name)
-            if product_name in products_to_buy:
-                eProduct.find_element_by_css_selector("div button").click()
+        # Steps and Assertions
+        homepage = Homepage(self.driver, self.test_url)
+        homepage.goto()
+        product_page = homepage.click_shop_button()
+        product_page.add_products_to_cart(products_to_buy)
+        assert product_page.get_checkout_number() == len(products_to_buy)
 
-        driver.find_element_by_css_selector("a[class*='btn-primary']").click()
-        e_products_in_cart = driver.find_elements_by_xpath("//td[contains(@class,'col-sm-8')]/parent::tr")
-        total = 0
-        for eProduct in e_products_in_cart:
-            product_name_in_cart = eProduct.find_element_by_css_selector("h4 a").text
-            print(product_name_in_cart)
-            assert product_name_in_cart in products_to_buy
-            product_total_text = str(eProduct.find_element_by_xpath("td[4]/strong").text)
-            product_total_text = product_total_text.replace(currency, "")
-            total += float(product_total_text)
+        cart_page = product_page.click_checkout_button()
+        products_in_cart = cart_page.get_products()
+        product_names_in_cart = [p.name for p in products_in_cart]
+        assert product_names_in_cart == products_to_buy
 
-        total_expected_text = driver.find_element_by_xpath("//td[@class='text-right']/h3/strong").text
-        print(total_expected_text)
-        total_expected_text = total_expected_text.replace(currency, "")
-        print(total_expected_text)
-        total_expected = float(total_expected_text)
-        assert total == total_expected
+        product_totals_in_cart = [p.total for p in products_in_cart]
+        assert sum(product_totals_in_cart) == cart_page.get_total()
 
-        driver.find_element_by_css_selector("button[class*='btn-success']").click()
-        driver.find_element_by_id("country").send_keys("United")
-        WebDriverWait(driver, 10).until(ec.presence_of_element_located((By.CSS_SELECTOR, "div[class='suggestions']")))
+        checkout_page = cart_page.click_checkout_button()
+        checkout_page.enter_destination(search_destination)
+        checkout_page.select_destination_from_dropdown(ship_to_destination)
+        assert ship_to_destination == checkout_page.get_destination()
 
-        ship_to_destination_xpath = "//a[text()='" + ship_to_destination + "']"
-        driver.find_element_by_xpath(ship_to_destination_xpath).click()
-        driver.find_element_by_css_selector("div[class='checkbox checkbox-primary'").click()
-        driver.find_element_by_css_selector("input[value='Purchase']").click()
-        success_text = driver.find_element_by_css_selector("div[class*='alert-success']").text
-        assert success_message_expected in success_text
+        checkout_page.click_agree_condition()
+        checkout_page.click_purchase_button()
+        assert success_message_expected in checkout_page.get_success_text()
