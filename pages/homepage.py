@@ -1,3 +1,4 @@
+from selenium.webdriver import ActionChains
 from selenium.webdriver.support.select import Select
 
 from locators.locators import HomepageLocators
@@ -54,7 +55,9 @@ class Homepage(BasePage):
         :return:
         '''
         dob_input = date.strftime('%m%d%Y')  # convert to string format
-        self.enter_text(HomepageLocators.DOB_FIELD, dob_input)
+        bday = self.driver.find_element(*HomepageLocators.DOB_FIELD)
+        bday.click()
+        ActionChains(self.driver).send_keys_to_element(bday, dob_input).perform()
 
     def click_submit_button(self):
         self.click(HomepageLocators.SUBMIT_BUTTON)
