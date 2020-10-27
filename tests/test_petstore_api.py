@@ -1,10 +1,9 @@
 import json
-
+from data.pet_data import *
 import requests
 import pytest
 
 from data.pet_data import Pet
-from testutil.petstore_util import *
 
 
 @pytest.mark.usefixtures("setup_pet_data")
