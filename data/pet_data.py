@@ -1,5 +1,6 @@
 from testutil.test_util import *
 
+
 class Pet:
 
     def __init__(self, id, pet_name="Pussy", cat_id=0, cat_name="N/A", status="available"):
@@ -22,3 +23,6 @@ def get_pet_endpoint():
     petstore_section = get_config()["petstore"]
     pet_url = petstore_section["base_url"] + "pet/"
     return pet_url
+
+
+DELETE_PETSTORE_QUERY = "DROP DATABASE PetStore;"

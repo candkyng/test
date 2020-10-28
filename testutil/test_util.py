@@ -11,13 +11,12 @@ def get_config():
 
 connect_config = {
     "host": get_config()['SQL']['host'],
-    "database": get_config()['SQL']['database'],
     "user": get_config()['SQL']['user'],
     "password": get_config()['SQL']['password']
 }
 
 
-def get_db_connect():
+def get_mysql_connect():
     try:
         conn = mysql.connector.connect(**connect_config)
 
@@ -27,4 +26,34 @@ def get_db_connect():
         print(e)
 
 
+def run_sql_script(file):
+    conn = get_mysql_connect()
+    try:
+        cursor = conn.cursor()
+        f = open(file)
+        lines = f.readlines()
+        for line in lines:
+            cursor.execute(line)
+        conn.commit()
+        conn.close()
+    except Error as e:
+        print(e)
 
+
+def run_sql_query(query, data=None):
+
+    conn = get_mysql_connect()
+    try:
+        cursor = conn.cursor()
+        cursor.execute(query, data)
+        result_all = cursor.fetchall()
+        conn.commit()
+        conn.close()
+        return result_all
+    except Error as e:
+        print(e)
+
+
+
+run_sql_script("..\\data\\pet_data.sql")
+print(run_sql_query("Select * from petstore.pets; "))
