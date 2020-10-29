@@ -1,4 +1,5 @@
 from testutil.test_util import *
+import os
 
 
 class Pet:
@@ -25,4 +26,27 @@ def get_pet_endpoint():
     return pet_url
 
 
-DELETE_PETSTORE_QUERY = "DROP DATABASE PetStore;"
+def import_pet_data(filename="pet_data.sql"):
+    current_dir = os.path.dirname(__file__)
+    run_sql_script(current_dir + "\\" + filename)
+
+
+def get_pet_data(status=None):
+    """
+    Get pet data from pets table from petsore database
+    :param status: if status is none, return pets of any status
+    :return: return list of Pet object
+    """
+
+    if status is None:
+        query = "Select * from petstore.pets;"
+    else:
+        query = f"Select * from petstore.pets where pet_status='{status}';"
+    pets = run_sql_query(query)   # result is a list of tuples (id, pet_name, category_id, category_name, pet_status)
+    return [Pet(*p) for p in pets]
+
+
+def drop_pet_db():
+    query = "DROP DATABASE PetStore;"
+    run_sql_query(query)
+

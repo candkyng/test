@@ -55,5 +55,3 @@ def run_sql_query(query, data=None):
 
 
 
-run_sql_script("..\\data\\pet_data.sql")
-print(run_sql_query("Select * from petstore.pets; "))

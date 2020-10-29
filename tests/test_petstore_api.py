@@ -9,26 +9,30 @@ from data.pet_data import Pet
 @pytest.mark.usefixtures("setup_pet_data")
 class TestPetStoreApi:
 
-    pet_id = 1214
-
     @pytest.fixture(scope="class")
     def setup_pet_data(self):
 
-        # Add a pet for all testcases
-        r_add = requests.post(get_pet_endpoint(), json=Pet(self.pet_id).json())
-        assert r_add.status_code == 200
+        import_pet_data()        # load pet data into the database
+        pets = get_pet_data()    # get pet data from database to post
+        for pet in pets:
+            r_add = requests.post(get_pet_endpoint(), json=pet.json())
+            assert r_add.status_code == 200, f"Unable to add pet {pet.id}"
 
         yield
 
-        # Delete the pet after running testcases in this class
-        r_delete = requests.delete(get_pet_endpoint() + str(self.pet_id))
-        assert r_delete.status_code == 200
+        # Delete each pet after running testcases in this class
+        for pet in pets:
+            r_delete = requests.delete(get_pet_endpoint() + str(pet.id))
+            assert r_delete.status_code == 200, f"Unable to clean up pet {pet.id}"
+        drop_pet_db()
 
     def test_pet_findById(self):
-        response = requests.get(get_pet_endpoint() + str(self.pet_id))
+        pets = get_pet_data()
+        pet_expected = pets[0]
+        response = requests.get(get_pet_endpoint() + str(pet_expected.id))
         assert response.status_code == 200
         pet_res = json.loads(response.text)
-        pet_expected = Pet(self.pet_id)
+
         assert pet_res["id"] == pet_expected.id, "Pet id does not match"
         assert pet_res["name"] == pet_expected.pet_name, "Pet name does not match"
         assert pet_res["status"] == pet_expected.status, "Pet status does not match"
