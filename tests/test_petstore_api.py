@@ -44,8 +44,22 @@ class TestPetStoreApi:
         result = json.loads(response.text)
         assert result["message"] == error_msg
 
-    def test_pet_findByStatus(self):
-        pass
+    def test_pet_findByOneStatus(self):
+        # Ensure only pets with available status are returned
+        # Ensure the last pet in the result is the "available" pet we posted
+        status = "available"
+
+        pets = get_pet_data(status)
+        response = requests.get(get_pet_endpoint() + "findByStatus", params={"status": status},)
+        assert response.status_code == 200
+        result = json.loads(response.text)
+        count_status = sum(map(lambda x: x["status"] == status, result))
+        assert count_status == len(result), "The number of available pets should be the total number returned (i.e. all are available)"
+        assert result[-1]["id"] == pets[-1].id and result[-1]["name"] == pets[-1].pet_name, f"Last pet is not the {status} pet we posted"
+
+    def test_pet_findByMultipleStatus(self):
+        # Ensure only pets with pending or sold status are returned
+        test = "pending,sold"
 
     def test_pet_findByStatus_invalidStatus(self):
         pass
