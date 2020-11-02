@@ -1,11 +1,19 @@
 <h1>test-web-demo</h1>
 <p>Create pytest framework with page object design pattern from scratch.</p>
-<p>Invoke selenium automated test scenarios by Jenkins</p>
+<p>Utilities for getting MySQL connection, run SQL script and run SQL queries
+<p>Invoke automated test scenarios by Jenkins</p>
+<p>Automated tests using pytest framework:
+<ol>
+ <li><code>[selenium]</code> test_shop.py: Test end to end shopping at practice website. Pull data from excel workbook.
+ <li><code>[selenium]</code> test_home.py: Test form submission at practice website. Pull data from CSV file.
+ <li><code>[api]</code>      test_petstore_api.py: Test Pet API calls at https://petstore.swagger.io/. Pull payload from database.
+</ol>
 
 <h2>Run test</h2>
  <p>Ensure the following python packages are installed:</p>
  <ul>
  <li>selenium</li>
+ <li>requests</li>
  <li>openpyxl</li>
  <li>pytest</li>
  </ul>
