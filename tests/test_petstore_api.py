@@ -3,8 +3,6 @@ from data.pet_data import *
 import requests
 import pytest
 
-from data.pet_data import Pet
-
 
 @pytest.mark.usefixtures("setup_pet_data")
 class TestPetStoreApi:
@@ -59,24 +57,51 @@ class TestPetStoreApi:
 
     def test_pet_findByMultipleStatus(self):
         # Ensure only pets with pending or sold status are returned
+        # Ensure the pending / sold pets we posted is in the resulted list
         test = "pending,sold"
+        status_list = str.split(test, ",")
+        pets = get_pet_data(test)
+        response = requests.get(get_pet_endpoint() + "findByStatus", params={"status": test}, )
+        assert response.status_code == 200
+        result = json.loads(response.text)
+        count_status = 0
+        for status in status_list:
+            count_status += sum(map(lambda x: x["status"] == status, result))
+        assert count_status == len(
+            result), f"The sum of {test} pets should be the total number returned"
+        # Find pet in the result
+        pets_found = 0
+        for pet in pets:
+            for res in result:
+                if pet.id == res["id"]:
+                    pets_found += 1
+                    break
+        assert pets_found == len(pets)
 
-    def test_pet_findByStatus_invalidStatus(self):
-        pass
+    def test_pet_update(self):
 
-    def test_pet_update_name(self):
-        pass
-
-    def test_pet_update_status(self):
-        pass
+        pet_id = 1023
+        parameters = {"name": "Pussy", "status": "sold"}
+        response = requests.post(get_pet_endpoint() + str(pet_id), data=parameters,)
+        assert response.status_code == 200
+        result = json.loads(response.text)
+        assert result["message"] == str(pet_id)
+        response = requests.get(get_pet_endpoint() + str(pet_id))
+        assert response.status_code == 200
+        result = json.loads(response.text)
+        assert result["name"] == parameters["name"]
+        assert result["status"] == parameters["status"]
 
     def test_pet_uploadImage_success(self):
-        pass
-        # url = "https://petstore.swagger.io/v2/pet/5030/uploadImage"
-        # files = {'file': open('C:\\Users\\candk\\OneDrive\\Pictures\\cat.PNG', 'rb')}
 
-    # r = requests.post(url, file = files)
-    # print(r.status_code)
-    # print(r.text)
+        pets = get_pet_data()
+        pet_to_update = pets[0]
+        files = {'file': open('C:\\Users\\candk\\OneDrive\\Pictures\\cat.PNG', 'rb')}
+        response = requests.post(get_pet_endpoint() + str(pet_to_update.id) + "/uploadImage", files=files)
+        assert response.status_code == 200
+        assert "File uploaded to" in response.text
+
+
+
 
 
