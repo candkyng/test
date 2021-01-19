@@ -27,8 +27,8 @@ def get_driver(request):
 
     driver.implicitly_wait(1)
     driver.maximize_window()
-    request.cls.driver = driver
-    yield
+    request.cls.driver = driver   # Set the driver variable in the test class
+    yield                         # Execute the code in the test method
     driver.close()
     driver.quit()
 
